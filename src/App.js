@@ -4,6 +4,7 @@ import Users from './user/pages/Users.js';
 import NewPlace from './places/pages/NewPlace.js';
 import UserPlaces from './places/pages/UserPlaces.js';
 import UpdatePlace from './places/pages/UpdatePlace.js';
+import Auth from './user/pages/Auth.js';
 import MainNavigation from './shared/components/Navigation/MainNavigation.js';
 
 
@@ -16,6 +17,10 @@ function App() {
         <Switch>
           <Route path="/" exact> 
             <Users />
+          </Route>
+
+          <Route path="/auth" exact> 
+            <Auth />
           </Route>
 
           <Route path="/:userId/places" exact> 
