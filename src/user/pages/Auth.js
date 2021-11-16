@@ -7,6 +7,8 @@ import {VALIDATOR_EMAIL, VALIDATOR_MINLENGTH, VALIDATOR_REQUIRE } from '../../sh
 import {useForm} from '../../shared/hooks/form-hook.js';
 import './Auth.css';
 
+//small change
+
 const Auth = () => {
   const [isLoginMode, setIsLoginMode] = useState(true)
   const [formState, inputHandler, setFormData] = useForm({
