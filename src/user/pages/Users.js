@@ -7,7 +7,7 @@ const Users = () => {
   const USERS = [
     {
     id:'u1',
-    name: 'Ramona Singer',
+    user: 'Ramona Singer',
     image: 'https://the-hollywood-gossip-res.cloudinary.com/iu/s--5k0sUAIe--/t_slideshow/cs_srgb,f_auto,fl_strip_profile.lossy,q_auto:420/v1407782421/ramona-singer-the-crazy-eyes-have-it.jpg',
     places: 3
     }

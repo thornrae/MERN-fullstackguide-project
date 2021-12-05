@@ -25,22 +25,44 @@ const Auth = () => {
     }
   }, false)
 
-  const authSubmitHandler = event => {
+  const authSubmitHandler = async event => {
     event.preventDefault();
-    console.log(formState.inputs);
+
+
+    if(isLoginMode) {
+      console.log('something')
+    } else {
+      try {
+        const response = await fetch('http://localhost:5000/api/users/signup', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+            },
+          body: JSON.stringify({
+          user: formState.inputs.user.value,
+          email: formState.inputs.email.value,
+          password: formState.inputs.password.value
+          })
+        });
+          const responseData = await response.json();
+          console.log(responseData);
+        } catch (err) {
+        console.log(err);
+      }
     auth.login();
   }
+}
 
   const switchModeHandler = () => {
     if(!isLoginMode) {
       setFormData({
         ...formState.inputs,
-        name: undefined
+        user: undefined
       }, formState.inputs.email.isValid && formState.inputs.password.isValid)
     } else {
       setFormData({
         ...formState.inputs,
-        name: {
+        user: {
           value: '',
           isValid: false
         }
@@ -57,7 +79,7 @@ const Auth = () => {
         {!isLoginMode && 
           <Input 
             element="input"
-            id="name"
+            id="user"
             type="text"
             label="Your Name"
             validators={[VALIDATOR_REQUIRE()]}
