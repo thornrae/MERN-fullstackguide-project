@@ -54,7 +54,7 @@ function App() {
         <UserPlaces />
       </Route>
 
-      <Route path="/auth" exact> 
+      <Route path="/auth" > 
         <Auth />
       </Route>
       <Redirect to="/auth" />
