@@ -1,20 +1,49 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 
 import UsersList from '../components/UsersList.js';
+import ErrorModal from '../../shared/components/UIElements/ErrorModal';
+import LoadingSpinner from '../../shared/components/UIElements/LoadingSpinner';
 
 
 const Users = () => {
-  const USERS = [
-    {
-    id:'u1',
-    name: 'Ramona Singer',
-    image: 'https://the-hollywood-gossip-res.cloudinary.com/iu/s--5k0sUAIe--/t_slideshow/cs_srgb,f_auto,fl_strip_profile.lossy,q_auto:420/v1407782421/ramona-singer-the-crazy-eyes-have-it.jpg',
-    places: 3
-    }
-  ];
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState();
+  const [loadedUsers, setLoadedUsers] = useState();
+
+  useEffect(() => {
+    const sendRequest = async () => {
+      setIsLoading(true)
+
+      try {
+        const response = await fetch('http://localhost:5000/api/users');
+
+        const responseData = await response.json();
+
+        if(!response.ok) {
+          throw new Error(responseData.message)
+        }
+        setLoadedUsers(responseData.users);
+      } catch(err) {
+        setError(err.message);
+      }
+      setIsLoading(false);
+    };
+    sendRequest();
+  }, []);
+
+  const errorHandler = () => {
+    setError(null);
+  }
 
   return (
-    <UsersList items={USERS} />
+    <>
+    <ErrorModal error={error} onClear={errorHandler} />
+    {isLoading && (<div className="center">
+      <LoadingSpinner/>
+      </div>)}
+      {!isLoading && loadedUsers &&
+    <UsersList items={loadedUsers} />}
+    </>
   );
 }
 
