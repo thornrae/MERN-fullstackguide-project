@@ -1,15 +1,23 @@
-import React from 'react';
+import React, {useContext} from 'react';
+import {useHistory} from 'react-router-dom'
 
 import Input from '../../shared/components/FormElements/Input.js';
 import { VALIDATOR_MINLENGTH, VALIDATOR_REQUIRE } from '../../shared/util/validators';
 import Button from '../../shared/components/FormElements/Button.js';
+import ErrorModal from '../../shared/components/UIElements/ErrorModal';
+import LoadingSpinner from '../../shared/components/UIElements/LoadingSpinner';
 
 import {useForm} from '../../shared/hooks/form-hook.js';
+import {useHttpClient} from '../../shared/hooks/http-hook';
+import {AuthContext} from '../../shared/context/auth-context';
 import './PlaceForm.css';
-
+// import Auth from '../../user/pages/Auth.js';
 
 
 const NewPlace = () => {
+  const auth = useContext(AuthContext);
+  const {isLoading, error, sendRequest, clearError} = useHttpClient();
+
   const [formState, inputHandler] = useForm(
     {
       title: {
@@ -25,15 +33,35 @@ const NewPlace = () => {
         isValid: false
       }
     }, false);
+
+    const history = useHistory();
+
   
-  const placeSubmitHandler = event => {
+  const placeSubmitHandler = async event => {
     event.preventDefault();
-    console.log(formState.inputs);  //will send this to the backend eventually
+    try {
+      await sendRequest('http://localhost:5000/api/places', 
+      'POST',
+      JSON.stringify({
+        title: formState.inputs.title.value,
+        description: formState.inputs.description.value,
+        address: formState.inputs.address.value, 
+        creator: auth.userId
+      }),
+      //need to add content type header and set to app/json otherwise, body parser on the backend would not be able to parse request.
+      {'Content-Type': 'application/json'}
+    )
+    history.push('/');
+    }catch(err) {}
+    
   }
 
 
   return (
+    <>
+    <ErrorModal error={error} onClear={clearError}/>
     <form className="place-form" onSubmit={placeSubmitHandler}>
+      {isLoading && <LoadingSpinner asOverlay/>}
       <Input
         id="title" 
         element="input"  
@@ -65,6 +93,7 @@ const NewPlace = () => {
       </Button>
        
     </form>
+    </>
   )
 }
 
