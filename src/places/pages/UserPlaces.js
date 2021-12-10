@@ -1,41 +1,40 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import { useParams } from 'react-router-dom';
 
 import PlaceList from '../components/PlaceList.js';
-
-const DUMMY_PLACES = [
-  {
-    id: 'p1',
-    title: 'Empire State Building',
-    description: 'tall ass building',
-    imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/10/Empire_State_Building_%28aerial_view%29.jpg/800px-Empire_State_Building_%28aerial_view%29.jpg',
-    address: '20 W 34th St, New York',
-    location: {
-      lat: 40.7484405,
-      lng: -73.9856644
-    },
-    creator: 'u1'
-  }, 
-  {
-    id: 'p2',
-    title: 'Emp. State Building',
-    description: 'tall ass building',
-    imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/10/Empire_State_Building_%28aerial_view%29.jpg/800px-Empire_State_Building_%28aerial_view%29.jpg',
-    address: '20 W 34th St, New York',
-    location: {
-      lat: 40.7484405,
-      lng: -73.9856644
-    },
-    creator: 'u2'
-  },
-]
+import ErrorModal from '../../shared/components/UIElements/ErrorModal.js';
+import LoadingSpinner from '../../shared/components/UIElements/LoadingSpinner.js';
+import { useHttpClient } from '../../shared/hooks/http-hook.js';
 
 const UserPlaces = () => {
+  const [loadedPlaces, setLoadedPlaces] = useState();
+  const { isLoading, error, sendRequest, clearError} = useHttpClient()
 
   const userId = useParams().userId;
-  const loadedPlaces = DUMMY_PLACES.filter(place => place.creator === userId);
+
+  useEffect( () => {
+    const fetchPlaces = async () => {
+      try {
+        const responseData = await sendRequest(`http://localhost:5000/api/places/user/${userId}`);
+        setLoadedPlaces(responseData.places);
+      }catch(err) {}
+    };
+    fetchPlaces();
+  }, [sendRequest, userId])
+
+ 
+  return (
+    <>
+    <ErrorModal error={error} clearError={clearError}/>
+    {isLoading && 
+      <div className="center">
+        <LoadingSpinner />
+      </div>}
+    {!isLoading && loadedPlaces && <PlaceList items={loadedPlaces} />}
+    </>
+
+  )
   
-  return <PlaceList items={loadedPlaces} />
 
 }
 
