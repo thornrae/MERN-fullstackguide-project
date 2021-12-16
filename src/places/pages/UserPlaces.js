@@ -11,6 +11,7 @@ const UserPlaces = () => {
   const { isLoading, error, sendRequest, clearError} = useHttpClient()
 
   const userId = useParams().userId;
+  console.log('userId', userId);
 
   useEffect( () => {
     const fetchPlaces = async () => {
@@ -26,16 +27,13 @@ const UserPlaces = () => {
   return (
     <>
     <ErrorModal error={error} clearError={clearError}/>
-    {isLoading && 
+    {isLoading && (
       <div className="center">
         <LoadingSpinner />
-      </div>}
+      </div>)}
     {!isLoading && loadedPlaces && <PlaceList items={loadedPlaces} />}
     </>
-
   )
-  
-
 }
 
 export default UserPlaces;

@@ -6,11 +6,15 @@ import Card from '../../shared/components/UIElements/Card.js';
 import Button from '../../shared/components/FormElements/Button.js';
 import Modal from '../../shared/components/UIElements/Modal.js';
 import Map from '../../shared/components/UIElements/Map.js';
+import {useHttpClient} from '../../shared/hooks/http-hook';
+
 import {AuthContext} from '../../shared/context/auth-context.js';
 import './PlaceItem.css'
 
 
 const PlaceItem = props => {
+  const {isLoading, error, sendRequest, clearError} = useHttpClient();
+
   const auth = useContext(AuthContext);
 
   const [showMap, setShowMap] = useState(false);
