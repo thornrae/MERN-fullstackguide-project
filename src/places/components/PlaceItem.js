@@ -6,8 +6,9 @@ import Card from '../../shared/components/UIElements/Card.js';
 import Button from '../../shared/components/FormElements/Button.js';
 import Modal from '../../shared/components/UIElements/Modal.js';
 import Map from '../../shared/components/UIElements/Map.js';
+import ErrorModal from '../../shared/components/UIElements/ErrorModal.js';
+import LoadingSpinner from '../../shared/components/UIElements/LoadingSpinner.js';
 import {useHttpClient} from '../../shared/hooks/http-hook';
-
 import {AuthContext} from '../../shared/context/auth-context.js';
 import './PlaceItem.css'
 
@@ -33,13 +34,18 @@ const PlaceItem = props => {
     setShowConfirmModal(false)
   }
 
-  const confirmDeleteHandler = () => {
+  const confirmDeleteHandler = async () => {
     setShowConfirmModal(false);
-    console.log('deleting...')
+    try{
+      await sendRequest(`http://localhost:5000/api/places/${props.id}`,'DELETE');
+      props.onDelete(props.id);
+    } catch(err) {}
   }
 
   return (
   <>
+  <ErrorModal error={error} onClear={clearError}/>
+
   <Modal 
     show={showMap} 
     onCancel={closeMapHandler} 
@@ -68,6 +74,7 @@ const PlaceItem = props => {
   </Modal>
   <li className="place-item">
     <Card className="place-item__content">
+      {isLoading && <LoadingSpinner asOverlay/>}
       <div className="place-item__image">
         <img src={props.imageUrl} alt={props.title} />
       </div>
@@ -79,11 +86,11 @@ const PlaceItem = props => {
       <div className="place-item__actions">
         
         <Button inverse onClick={openMapHandler}>view on map</Button>
-        {auth.isLoggedIn &&
-        <Button component={Link}  to={`/places/${props.id}`}>edit</Button>}
+        {auth.userId === props.creatorId && (
+        <Button component={Link}  to={`/places/${props.id}`}>edit</Button>)}
 
-        {auth.isLoggedIn && 
-        <Button danger onClick={showDeleteWarningHandler}>delete</Button>}
+        {auth.userId === props.creatorId && (
+        <Button danger onClick={showDeleteWarningHandler}>delete</Button>)}
     </div>
     </Card>
   </li>
