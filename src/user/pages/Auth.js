@@ -5,7 +5,7 @@ import Input from '../../shared/components/FormElements/Input.js';
 import Button from '../../shared/components/FormElements/Button.js';
 import ErrorModal from '../../shared/components/UIElements/ErrorModal';
 import LoadingSpinner from '../../shared/components/UIElements/LoadingSpinner';
-
+import ImageUpload from '../../shared/components/FormElements/ImageUpload.js';
 import {VALIDATOR_EMAIL, VALIDATOR_MINLENGTH, VALIDATOR_REQUIRE } from '../../shared/util/validators.js';
 import {useForm} from '../../shared/hooks/form-hook.js';
 import {useHttpClient} from '../../shared/hooks/http-hook';
@@ -116,6 +116,7 @@ const Auth = () => {
             errorText="please enter a name"
             onInput={inputHandler}
           />}
+          {!isLoginMode && <ImageUpload center id="image" />}
         <Input 
           element="input"
           id="email"
