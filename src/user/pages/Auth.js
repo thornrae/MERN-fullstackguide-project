@@ -117,7 +117,12 @@ const Auth = () => {
             errorText="please enter a name"
             onInput={inputHandler}
           />}
-          {!isLoginMode && <ImageUpload center id="image" onInput={inputHandler} />}
+          {!isLoginMode && 
+            <ImageUpload 
+              center id="image" 
+              onInput={inputHandler}
+              onError="please upload image"
+            />}
         <Input 
           element="input"
           id="email"
