@@ -48,7 +48,7 @@ const Auth = () => {
         }, 
         image: {
           value: null,
-          isvalid: false
+          isValid: false
         }
       }, false)
     }
@@ -72,11 +72,10 @@ const Auth = () => {
            },
            
         );
-        auth.login(responseData.user.id);
+        console.log('response data auth',responseData)
+        auth.login(responseData.userId, responseData.token);
       } catch(err){
-        //okay to be empty. or do .then
       }
-          // console.log(responseData)
     } else {
       try {
         const formData = new FormData();
@@ -89,7 +88,7 @@ const Auth = () => {
           'POST', 
           formData
       );
-        auth.login(responseData.user.id);
+        auth.login(responseData.userId, responseData.token);
       } catch (err) {}
   }
 };
