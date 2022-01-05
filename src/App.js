@@ -8,6 +8,7 @@ import Auth from './user/pages/Auth.js';
 import MainNavigation from './shared/components/Navigation/MainNavigation.js';
 import {useAuth} from './shared/hooks/auth-hook';
 import {AuthContext} from './shared/context/auth-context.js';
+// bullshit to make change to merge in github
 
 
 function App() {
