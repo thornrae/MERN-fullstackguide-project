@@ -53,7 +53,7 @@ const NewPlace = () => {
       formData.append('image', formState.inputs.image.value);
 
       console.log('auth.token', auth.token)
-      await sendRequest('http://localhost:5000/api/places', 
+      await sendRequest(process.env.REACT_APP_BACKEND_URL + '/places', 
         'POST', 
         formData, 
         {Authorization: 'Bearer ' + auth.token}
